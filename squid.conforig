@@ -58,13 +58,16 @@ cache_access_log /data/proclog/log/squid/access.log squid_custom_log
 #logformat security_custom_log %ts.%03.5tu %>a %ru "%fst" "%fsd"
 #cache_access_log /data/proclog/log/squid/access_security.log security_custom_log
 #access cut interval,default 300s
-#access_log_rotate_interval 300
+access_log_rotate_interval 0
 ####
 strip_query_terms off
 logfile_rotate 0
 cache_log /data/proclog/log/squid/cache.log
 cache_store_log none
-http_port 80 accel vhost vport allow-direct http11
+#http_port 172.20.2.4:80 accel vhost vport allow-direct http11
+http_port 10.10.10.3:80 accel vhost vport allow-direct http11
+#http_port 127.0.0.1:80 accel vhost vport allow-direct http11
+#http_port 80 accel vhost vport allow-direct http11
 icp_port 0
 snmp_port 3401
 cache_effective_user squid 
@@ -138,13 +141,16 @@ http_access allow acl_myweb
 #>demo.testfire.net
 
 #<common_end
+acl acl_test dstdomain www.test.com
+#no_cache deny acl_test
+
 url_rewrite_access deny all
 url_rewrite_program /usr/local/squid/bin/redirect /usr/local/squid/etc/redirect.conf
 url_rewrite_children 30
 url_rewrite_host_header on
 redirector_bypass off
 refresh_pattern -i  ^http    1440   0%  1440   ignore-reload override-lastmod
-http_access deny all
+http_access allow all
 http_reply_access allow all
 
 mod_Powered-By-FeiXun_header_details name=Sophnep-Edge-FX allow all
