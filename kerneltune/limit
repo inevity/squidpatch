@@ -1,0 +1,3 @@
+/etc/security/limits.conf:
+* soft nofile 344800
+* hard nofile 344800
